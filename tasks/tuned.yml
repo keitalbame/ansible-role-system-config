@@ -1,0 +1,18 @@
+---
+- name: Create new profile folder
+  file:
+    path: /usr/lib/tuned/{{ tuned_profile_name }}/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+- name: Copy tuned profile
+  template:
+    src: tuned.conf.j2
+    dest: /usr/lib/tuned/{{ tuned_profile_name }}/tuned.conf
+    owner: 0
+    group: 0
+    mode: 0644
+- name: Activate {{ tuned_profile_name }} profile
+  changed_when: false # Necessary for idempotence test to pass.
+  command: /usr/sbin/tuned-adm profile {{ tuned_profile_name }}

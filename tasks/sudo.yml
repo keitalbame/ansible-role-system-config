@@ -1,0 +1,8 @@
+---
+- name: Allow wheels group users to sudo without password
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%wheel\s'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+  when: sudo_nopass

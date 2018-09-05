@@ -1,0 +1,19 @@
+---
+- hosts: all
+  any_errors_fatal: yes
+  pre_tasks:
+    - name: Include vars
+      include_vars: vars.yml
+    - name: install test dependencies
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items: [docker, tuned]
+
+    - name: Start service tuned, if not running
+      service:
+        name: tuned
+        state: started
+      when: ansible_virtualization_type == 'docker' and ansible_virtualization_role == 'guest'
+  roles:
+    - ansible-role-system-config

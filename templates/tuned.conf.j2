@@ -1,0 +1,13 @@
+#{{ ansible_managed }}
+#
+# tuned configuration
+#
+
+[main]
+summary={{ tuned_main_summary }}
+include={{ tuned_main_include }}
+
+[sysctl]
+{% for sysctl_vars in tuned_sysctl %}
+{{ sysctl_vars.type }} = {{ sysctl_vars.value }}
+{% endfor %}

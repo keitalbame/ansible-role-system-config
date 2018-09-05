@@ -1,0 +1,16 @@
+---
+# Role defaults file
+
+# Configue hosts file - hostname.yml
+# domain_fqdn: example.com
+
+# tuned
+tuned_profile_name: containers-workflow
+tuned_main_summary: Optimizations for Docker and k8s host VMs
+tuned_main_include: virtual-guest # Existing base profile for the new one.
+tuned_sysctl:
+  - { type: "net.ipv4.ip_forward", value: "1" }
+  - { type: "vm.swappiness", value: "0" }
+
+# Sudo configurations - sudo.yml
+sudo_nopass: False

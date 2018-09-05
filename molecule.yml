@@ -1,0 +1,27 @@
+---
+ansible:
+  playbook: tests/playbook.yml
+# verifier:
+#   name: testinfra
+dependency:
+  name: shell
+  command: ./.travis/image.sh
+molecule:
+  test:
+    sequence:
+      - syntax
+      - destroy
+      - create
+      - converge
+      - idempotence
+      - verify
+      - destroy
+docker:
+  build_image: False
+  containers:
+    - name: centos7
+      image: paulfantom/centos-molecule
+      image_version: 7
+      privileged: true
+      volume_mounts:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro

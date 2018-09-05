@@ -1,0 +1,12 @@
+---
+- name: Ensure hostname is set based on host inventory
+  hostname:
+    name: "{{ inventory_hostname }}"
+  when: not (inventory_hostname is match('(\d{1,3}\.){3}\d{1,3}')) and not(ansible_virtualization_type == 'docker' and ansible_virtualization_role == 'guest') # inventory name not an IP address
+
+- name: Ensure hostname is in /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "^{{ ansible_default_ipv4.address }}.+$"
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}.{{ domain_fqdn }} {{ ansible_hostname }}"
+  when: domain_fqdn is defined
